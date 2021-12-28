@@ -25,7 +25,7 @@ app.use("/api", users)
 
 
 
-mongoose.connect("mongodb://localhost:27017/user").then(
+mongoose.connect(process.env.MONGO_URL).then(
   () => {
     app.listen(3000, function () {
       console.log("Node server running on http://localhost:3000");
