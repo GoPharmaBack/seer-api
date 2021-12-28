@@ -27,7 +27,7 @@ app.use("/api", users)
 
 mongoose.connect(process.env.MONGO_URL).then(
   () => {
-    app.listen(3000, function () {
+    app.listen(process.env.PORT || 8080 , function () {
       console.log("Node server running on http://localhost:3000");
     });
   },
