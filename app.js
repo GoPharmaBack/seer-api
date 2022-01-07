@@ -22,7 +22,7 @@ app.use("/login", login)
 
 
 
-mongoose.connect("mongodb+srv://king:1@cluster0.ofypl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority").then(
+mongoose.connect(process.env.MONGO_URL).then(
   () => {
     app.listen(process.env.PORT || 3000 , function () {
       console.log("Node server running on http://localhost:3000");
