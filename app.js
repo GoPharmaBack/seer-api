@@ -1,3 +1,4 @@
+const cors = require("cors");
 var express = require("express"),
   app = express(),
   bodyParser = require("body-parser"),
@@ -7,6 +8,7 @@ server = http.createServer(app);
 mongoose = require("mongoose");
 var usersR = require("./routes/users")
 var login = require("./routes/auth")
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride());
