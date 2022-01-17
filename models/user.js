@@ -7,7 +7,7 @@ var userSchema = new Schema({
   lastName: { type: String },
   secondLastName:{ type: String },
   place: { type: String },
-  email: { type: String },
+  email: { type: String , unique: true},
   phone: { type: Number },
   professionalLicense: { type: String},
   password: { type: String},

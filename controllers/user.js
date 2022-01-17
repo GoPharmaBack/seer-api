@@ -22,6 +22,9 @@ exports.findAllUsers = function (req, res) {
 exports.addUser = async function (req, res) {
     const body = req.body;
     const { MMERGE3: name, FNAME: lastName, LNAME: secondLastName, MMERGE6: place, EMAIL: email, PHONE: phone, MMERGE7: professionalLicense } = body;
+    if(!email ){
+        res.status(400).send({required: "no contiene email "})
+    }
     var user = new User({
         name,
         lastName,
@@ -34,7 +37,8 @@ exports.addUser = async function (req, res) {
         role: 'user'
     })
     user.save(function (err, user) {
-        if (err) return res.status(500).send(err.message)
+        if (err?.keyValue?.email) return res.status(400).send({msg: "email ya fue registrado"})
+        if (err) return res.status(500).send(err)
         res.status(200).jsonp(user)
     })
 
