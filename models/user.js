@@ -8,7 +8,7 @@ var userSchema = new Schema({
   secondLastName:{ type: String },
   place: { type: String },
   email: { type: String , unique: true},
-  phone: { type: Number },
+  phone: { type: String },
   professionalLicense: { type: String},
   password: { type: String},
   role: { type: String }
