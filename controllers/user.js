@@ -1,10 +1,9 @@
 var mongoose = require("mongoose")
 require('../models/user');
 var User = mongoose.model("User")
-
-
-var FormData = require('form-data');
-var axios = require('axios');
+let ejs = require("ejs");
+let pdf = require("html-pdf");
+let path = require("path");
 
 
 
@@ -17,6 +16,25 @@ exports.findAllUsers = function (req, res) {
         res.status(200).jsonp(users)
     });
 };
+
+exports.findById = function (req, res) {
+    User.findById(req.query.id, function (err, userData) {
+        if (err) res.send(500, err.message);
+        generatePDF(userData, function (err, pdfStream) {
+            if (err) {
+                console.log(err)
+                return res.sendStatus(500)
+            } else {
+                res.statusCode = 200
+                pdfStream.on('end', () => {
+                    return res.end()
+                })
+                pdfStream.pipe(res)
+            }
+        })
+    });
+};
+
 
 //POST - Insert a new User in the DB
 exports.addUser = async function (req, res) {
@@ -47,26 +65,24 @@ exports.addUser = async function (req, res) {
 
 
 }
-const sendToForm = async (cb) => {
-    /*     var form = new FormData();
-        form.append('my_field', 'my value');
-        form.submit('https://coiner.us1.list-manage.com/subscribe/post?u=37892f6a3c3f15b6ba401af59&id=744ea1621c', function (err, res) {
-            if (err) {
-                console.log(err);
-            }
-            // res – response object (http.IncomingMessage)  //
-            res.resume();
-            res.status(200).send()
-    
-        }); */
 
-    const data = new URLSearchParams();
-    data.append('key', 'value');
-    try {
-        const response = await axios.post('https://coiner.us1.list-manage.com/subscribe/post?u=37892f6a3c3f15b6ba401af59&id=744ea1621c', data, { headers: { 'Content-Type': 'multipart/form-data' } })
-        console.log(response)
-    } catch (error) {
-        console.log(error)
 
-    }
+const generatePDF = (user, fun) => {
+    ejs.renderFile(path.join(__dirname, '../views/', "report-template.ejs"), { user }, (err, data) => {
+        if (err) {
+            res.send(err);
+        } else {
+            let options = {
+                "height": "11.25in",
+                "width": "8.5in",
+                "header": {
+                    "height": "20mm"
+                },
+                "footer": {
+                    "height": "20mm",
+                },
+            };
+            pdf.create(data, options).toStream(fun);
+        }
+    });
 }

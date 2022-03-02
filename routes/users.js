@@ -1,11 +1,10 @@
 var express = require("express");
-var UserCtrl = require("../controllers/user")
+var UserCtrl = require("../controllers/user");
+const { findById } = require("../models/user");
 
 var usersR = express.Router()
 
 usersR
     .route("/")
-    .get(UserCtrl.findAllUsers)
-    .post(UserCtrl.addUser)
-
+    .post(UserCtrl.addUser).get(UserCtrl.findById);
 module.exports = usersR;
