@@ -4,7 +4,6 @@
 
 ## Docs 📄
 
-[Documentation](https://documenter.getpostman.com/view/12403851/UVC3kTwP)
 
 ## Packages that are used 📦
 
